@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
+use App\Contracts\Invokable;
 use Illuminate\Support\Facades\File;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\info;
 
-final class ConfigurePint
+final class ConfigurePint implements Invokable
 {
     private const systemConfigurationDir = '.devpro/default';
 

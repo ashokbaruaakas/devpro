@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Commands;
 
 use App\Actions\ConfigurePint;
+use App\Contracts\Invokable;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 
@@ -39,7 +40,7 @@ final class Configure extends Command
             return;
         }
 
-        collect($tools)->each(fn (string $tool) => (new $tool())());
+        collect($tools)->each(fn (string $tool) => $this->invokeAction(new $tool));
     }
 
     /**
@@ -50,22 +51,25 @@ final class Configure extends Command
         // $schedule->command(static::class)->everyMinute();
     }
 
+    /**
+     * Get all the tools to configure.
+     */
     private function getTools(): array
     {
-        $supportedTools = [ConfigurePint::class => 'Pint'];
+        $supportedTools = [
+            ConfigurePint::class => 'Pint',
+        ];
 
-        if ($toolsStr = $this->option('tools')) {
-            $tools = explode(',', $toolsStr);
-            $tools = array_keys(array_diff($supportedTools, $tools));
-        }
-
-        if (! isset($tools)) {
-            $tools = multiselect(
+        return $this->option('tools')
+            ? array_keys(array_diff($supportedTools, $this->option('tools')))
+            : multiselect(
                 label: 'What do you want to configure?',
-                options: $supportedTools
+                options: $supportedTools,
             );
-        }
+    }
 
-        return $tools;
+    private function invokeAction(Invokable $action)
+    {
+        return $action();
     }
 }
