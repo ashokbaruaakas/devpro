@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace App\Commands;
 
+use App\Actions\ConfigurePint;
 use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Support\Facades\File;
 use LaravelZero\Framework\Commands\Command;
 
-use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\multiselect;
 
 final class Configure extends Command
@@ -27,29 +26,10 @@ final class Configure extends Command
      */
     protected $description = 'Configure Packages or Tools';
 
-    private string $applicationBasePath;
-
-    private string $currentWorkingDirectory;
-
-    private string $defaultConfigurationDirectory = '.devpro/default';
-
-    /** @var array{string: string} */
-    private array $defaultConfigurationFiles = [
-        'pint' => 'pint.json',
-    ];
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->applicationBasePath = base_path();
-        $this->currentWorkingDirectory = getcwd();
-    }
-
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $tools = $this->getTools();
 
@@ -59,7 +39,7 @@ final class Configure extends Command
             return;
         }
 
-        when(in_array('Pint', $tools), fn () => $this->configurePint());
+        collect($tools)->each(fn (string $tool) => (new $tool())());
     }
 
     /**
@@ -72,59 +52,20 @@ final class Configure extends Command
 
     private function getTools(): array
     {
-        $supportedTools = ['Pint'];
+        $supportedTools = [ConfigurePint::class => 'Pint'];
 
         if ($toolsStr = $this->option('tools')) {
             $tools = explode(',', $toolsStr);
-            $tools = array_diff($supportedTools, $tools);
+            $tools = array_keys(array_diff($supportedTools, $tools));
         }
 
         if (! isset($tools)) {
             $tools = multiselect(
                 label: 'What do you want to configure?',
-                options: ['Pint']
+                options: $supportedTools
             );
         }
 
         return $tools;
-    }
-
-    private function configurePint(): void
-    {
-        if (! File::exists($this->currentWorkingDirectory.'/vendor/bin/pint')) {
-            $this->info('Pint not installed, installing it via composer...');
-
-            exec('composer require laravel/pint --dev');
-        }
-
-        $targetedFilePath = $this->currentWorkingDirectory.'/pint.json';
-
-        if (File::exists($targetedFilePath)) {
-            $this->info('Pint already configured.');
-
-            if (
-                ! confirm('Do you want to overwrite the existing pint configuration file?', false)
-            ) {
-
-                $this->info('Pint configuration skipped.');
-
-                return;
-            }
-
-            File::delete($targetedFilePath);
-        }
-
-        File::copy($this->pintConfigurationFilePath(), $targetedFilePath);
-
-        $this->info('Pint successfully configured.');
-    }
-
-    private function pintConfigurationFilePath(): string
-    {
-        return $this->applicationBasePath
-        .DIRECTORY_SEPARATOR
-        .$this->defaultConfigurationDirectory
-        .DIRECTORY_SEPARATOR
-        .$this->defaultConfigurationFiles['pint'];
     }
 }
