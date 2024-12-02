@@ -22,7 +22,7 @@ final class ConfigurePint implements Invokable
     public function __invoke(): void
     {
         if (! File::exists("{$this->cwd}/vendor/bin/pint")) {
-            $this->consolePrint('Pint not installed, installing it via composer...');
+            info('Pint not installed, installing it via composer...');
             exec('composer require laravel/pint --dev');
         }
 
@@ -30,13 +30,13 @@ final class ConfigurePint implements Invokable
 
         if (File::exists($targetedPath) &&
             ! confirm('Do you want to overwrite the existing pint configuration file?', false)) {
-            $this->consolePrint('Pint configuration skipped.');
+            info('Pint configuration skipped.');
 
             return;
         }
 
         File::copy($this->pintStubPath(), $targetedPath);
-        $this->consolePrint('Pint successfully configured.');
+        info('Pint successfully configured.');
     }
 
     private function pintStubPath(): string
@@ -45,12 +45,5 @@ final class ConfigurePint implements Invokable
             config('devpro.stubs_path'),
             'pint-json.stub',
         ]);
-    }
-
-    private function consolePrint(string $message): void
-    {
-        if (! empty($message) && app()->runningInConsole()) {
-            info($message);
-        }
     }
 }
