@@ -12,23 +12,18 @@ use function Laravel\Prompts\info;
 
 final class ConfigureLarastan implements Invokable
 {
-    private string $cwd;
-
-    public function __construct()
-    {
-        $this->cwd = getcwd();
-    }
-
     public function __invoke(): void
     {
         info('Configuring Larastan...');
 
-        if (! File::exists("{$this->cwd}/vendor/bin/phpstan")) {
+        $cwd = getcwd() ?: '.';
+
+        if (! File::exists("{$cwd}/vendor/bin/phpstan")) {
             info('Larastan not installed, installing it via composer...');
             exec('composer require --dev "larastan/larastan:^3.0"');
         }
 
-        $targetPath = "{$this->cwd}/phpstan.neon";
+        $targetPath = "{$cwd}/phpstan.neon";
 
         if (File::exists($targetPath) &&
             ! confirm('Do you want to overwrite the existing larastan configuration file?', default: false)) {

@@ -35,13 +35,13 @@ final class Configure extends Command
     {
         $tools = $this->getTools();
 
-        if (empty($tools)) {
+        if (count($tools) === 0) {
             $this->info('Nothing to configure.');
 
             return;
         }
 
-        collect($tools)->each(fn (string $tool) => $this->invokeAction(new $tool));
+        collect($tools)->each(fn (string $tool) => $this->invokeAction(new $tool()));
     }
 
     /**
@@ -54,15 +54,18 @@ final class Configure extends Command
 
     /**
      * Get all the tools to configure.
+     *
+     * @return array<class-string<Invokable>>
      */
     private function getTools(): array
     {
+        /** @var array<string, class-string<Invokable>> */
         $supportedTools = [
             'PINT' => ConfigurePint::class,
             'LARASTAN' => ConfigureLarastan::class,
         ];
 
-        return $this->option('tools')
+        $tools = $this->option('tools')
             ? collect(explode(',', $this->option('tools')))
                 ->map(fn (string $tool) => mb_strtoupper($tool))
                 ->filter(fn (string $tool) => array_key_exists($tool, $supportedTools))
@@ -72,10 +75,13 @@ final class Configure extends Command
                 label: 'What do you want to configure?',
                 options: array_flip($supportedTools),
             );
+
+        /** @var array<class-string<Invokable>> $tools */
+        return $tools;
     }
 
-    private function invokeAction(Invokable $action)
+    private function invokeAction(Invokable $action): void
     {
-        return $action();
+        $action();
     }
 }

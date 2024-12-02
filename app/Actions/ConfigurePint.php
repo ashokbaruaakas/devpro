@@ -12,32 +12,27 @@ use function Laravel\Prompts\info;
 
 final class ConfigurePint implements Invokable
 {
-    private string $cwd;
-
-    public function __construct()
-    {
-        $this->cwd = getcwd();
-    }
-
     public function __invoke(): void
     {
         info('Configuring Pint...');
 
-        if (! File::exists("{$this->cwd}/vendor/bin/pint")) {
+        $cwd = getcwd() ?: '.';
+
+        if (! File::exists("{$cwd}/vendor/bin/pint")) {
             info('Pint not installed, installing it via composer...');
             exec('composer require laravel/pint --dev');
         }
 
-        $targetedPath = "{$this->cwd}/pint.json";
+        $targetPath = "{$cwd}/pint.json";
 
-        if (File::exists($targetedPath) &&
+        if (File::exists($targetPath) &&
             ! confirm('Do you want to overwrite the existing pint configuration file?', false)) {
             info('Pint configuration skipped.');
 
             return;
         }
 
-        File::copy($this->pintStubPath(), $targetedPath);
+        File::copy($this->pintStubPath(), $targetPath);
         info('Pint successfully configured.');
     }
 
