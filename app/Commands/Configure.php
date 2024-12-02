@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Commands;
 
+use App\Actions\ConfigureLarastan;
 use App\Actions\ConfigurePint;
 use App\Contracts\Invokable;
 use Illuminate\Console\Scheduling\Schedule;
@@ -58,6 +59,7 @@ final class Configure extends Command
     {
         $supportedTools = [
             ConfigurePint::class => 'Pint',
+            ConfigureLarastan::class => 'Larastan',
         ];
 
         return $this->option('tools')
