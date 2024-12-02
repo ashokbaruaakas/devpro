@@ -8,6 +8,7 @@ use App\Contracts\Invokable;
 use Illuminate\Support\Facades\File;
 
 use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\info;
 
 final class ConfigureLarastan implements Invokable
 {
@@ -20,12 +21,14 @@ final class ConfigureLarastan implements Invokable
 
     public function __invoke(): void
     {
+        info('Configuring Larastan...');
+
         if (! File::exists("{$this->cwd}/vendor/bin/phpstan")) {
             info('Larastan not installed, installing it via composer...');
             exec('composer require --dev "larastan/larastan:^3.0"');
         }
 
-        $targetPath = "{$this->cwd}/larastan.neon";
+        $targetPath = "{$this->cwd}/phpstan.neon";
 
         if (File::exists($targetPath) &&
             ! confirm('Do you want to overwrite the existing larastan configuration file?', default: false)) {
