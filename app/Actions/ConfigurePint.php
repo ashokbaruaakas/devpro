@@ -21,6 +21,8 @@ final class ConfigurePint implements Invokable
 
     public function __invoke(): void
     {
+        info('Configuring Pint...');
+
         if (! File::exists("{$this->cwd}/vendor/bin/pint")) {
             info('Pint not installed, installing it via composer...');
             exec('composer require laravel/pint --dev');
