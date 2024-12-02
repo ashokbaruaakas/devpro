@@ -58,15 +58,19 @@ final class Configure extends Command
     private function getTools(): array
     {
         $supportedTools = [
-            ConfigurePint::class => 'Pint',
-            ConfigureLarastan::class => 'Larastan',
+            'PINT' => ConfigurePint::class,
+            'LARASTAN' => ConfigureLarastan::class,
         ];
 
         return $this->option('tools')
-            ? array_keys(array_diff($supportedTools, $this->option('tools')))
+            ? collect(explode(',', $this->option('tools')))
+                ->map(fn (string $tool) => mb_strtoupper($tool))
+                ->filter(fn (string $tool) => array_key_exists($tool, $supportedTools))
+                ->map(fn (string $tool) => $supportedTools[$tool])
+                ->toArray()
             : multiselect(
                 label: 'What do you want to configure?',
-                options: $supportedTools,
+                options: array_flip($supportedTools),
             );
     }
 
