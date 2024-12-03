@@ -22,10 +22,10 @@
         }
     ],
     "require": {
-        "php": "^8.2.0",
-        "laravel-zero/framework": "^11.0.2"
+        "php": "^8.2.0"
     },
     "require-dev": {
+        "laravel-zero/framework": "^11.0.2",
         "larastan/larastan": "^3.0",
         "laravel/pint": "^1.18",
         "mockery/mockery": "^1.6.12",
@@ -54,6 +54,6 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "bin": [
-        "devpro"
+        "builds/devpro"
     ]
 }
