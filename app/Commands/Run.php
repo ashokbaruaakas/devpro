@@ -95,9 +95,9 @@ final class Run extends Command
             $action = $this->detectKeypress();
 
             match ($action) {
-                'r' => $process->stop() && $process->start(),
-                'q' => $process->stop(),
-                'c' => clear(),
+                'r' => $this->restartProcess($process),
+                'q' => $this->quiteProcess($process),
+                'c' => $this->clearScreen(),
                 default => $this->doNothing(),
             };
         }
@@ -108,6 +108,25 @@ final class Run extends Command
         while ($process->isRunning() && ($buffer = $process->getIncrementalOutput())) {
             info($buffer);
         }
+    }
+
+    private function restartProcess(Process $process): void
+    {
+        info('Restarting...');
+        $process->stop();
+        $process->start();
+    }
+
+    private function quiteProcess(Process $process): void
+    {
+        info('Quitting...');
+        $process->stop();
+    }
+
+    private function clearScreen(): void
+    {
+        info('Clearing screen...');
+        clear();
     }
 
     private function executeScript(string $script): void
