@@ -6,8 +6,6 @@ namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Str;
-use Laravel\Prompts\Concerns\Colors;
-use Laravel\Prompts\Themes\Default\Concerns\DrawsBoxes;
 use LaravelZero\Framework\Commands\Command;
 use Symfony\Component\Process\Process;
 
@@ -18,9 +16,6 @@ use function Laravel\Prompts\search;
 
 final class Run extends Command
 {
-    use Colors;
-    use DrawsBoxes;
-
     /**
      * The name and signature of the console command.
      *
