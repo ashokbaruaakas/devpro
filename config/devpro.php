@@ -11,5 +11,6 @@ return [
         'test' => 'php artisan test',
         'format' => './vendor/bin/pint',
         'analyse' => './vendor/bin/phpstan analyse',
+        'log-clean' => 'find storage/logs -type f ! -name ".gitignore" -delete',
     ],
 ];
