@@ -7,7 +7,7 @@ namespace App\Actions;
 use App\Contracts\Invokable;
 use Illuminate\Support\Facades\File;
 
-final class MakeHomeDir implements Invokable
+final class MakeUserConfigDir implements Invokable
 {
     public function __invoke(): void
     {
