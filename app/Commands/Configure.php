@@ -7,6 +7,7 @@ namespace App\Commands;
 use App\Actions\ConfigureLarastan;
 use App\Actions\ConfigurePail;
 use App\Actions\ConfigurePint;
+use App\Actions\ConfigurePrettier;
 use App\Contracts\Invokable;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
@@ -65,6 +66,7 @@ final class Configure extends Command
             'PINT' => ConfigurePint::class,
             'LARASTAN' => ConfigureLarastan::class,
             'PAIL' => ConfigurePail::class,
+            'PRETTIER' => ConfigurePrettier::class,
         ];
 
         $tools = $this->option('tools')
