@@ -14,8 +14,6 @@ final class ConfigurePint implements Invokable
 {
     public function __invoke(): void
     {
-        info('Configuring Pint...');
-
         $cwd = getcwd() ?: '.';
 
         if (! File::exists("{$cwd}/vendor/bin/pint")) {
@@ -33,7 +31,6 @@ final class ConfigurePint implements Invokable
         }
 
         File::copy($this->pintStubPath(), $targetPath);
-        info('Pint successfully configured.');
     }
 
     private function pintStubPath(): string

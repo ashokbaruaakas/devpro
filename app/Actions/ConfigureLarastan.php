@@ -14,8 +14,6 @@ final class ConfigureLarastan implements Invokable
 {
     public function __invoke(): void
     {
-        info('Configuring Larastan...');
-
         $cwd = getcwd() ?: '.';
 
         if (! File::exists("{$cwd}/vendor/bin/phpstan")) {
@@ -33,7 +31,6 @@ final class ConfigureLarastan implements Invokable
         }
 
         File::copy($this->larastanStubPath(), $targetPath);
-        info('Larastan successfully configured.');
     }
 
     private function larastanStubPath(): string

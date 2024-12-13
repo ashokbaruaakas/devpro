@@ -86,6 +86,14 @@ final class Configure extends Command
 
     private function invokeAction(Invokable $action): void
     {
-        $action();
+        $this->task(
+            str($action::class)
+                ->replace(['App\\Actions\\', 'Configure', 'Action'], '')
+                ->title()
+                ->prepend('Configuring ')
+                ->toString(),
+            fn () => $action()
+        );
+        $this->newLine();
     }
 }

@@ -13,23 +13,11 @@ final class ConfigurePail implements Invokable
 {
     public function __invoke(): void
     {
-        info('Configuring Pail...');
-
         $cwd = getcwd() ?: '.';
 
-        if (! File::exists("{$cwd}/vendor/bin/pail")) {
+        if (! File::exists("{$cwd}/vendor/laravel/pail")) {
             info('Pail not installed, installing it via composer...');
             exec('composer require --dev laravel/pail');
         }
-
-        info('Pail successfully configured.');
-    }
-
-    private function pailStubPath(): string
-    {
-        return implode(DIRECTORY_SEPARATOR, [
-            config('devpro.stubs_path'),
-            'pail-neon.stub',
-        ]);
     }
 }
