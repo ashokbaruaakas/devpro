@@ -6,6 +6,7 @@ namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Str;
+use Illuminate\Support\Stringable;
 use LaravelZero\Framework\Commands\Command;
 use Symfony\Component\Process\Process;
 
@@ -47,6 +48,10 @@ final class Run extends Command
         }
 
         foreach ((array) $scripts[$scriptName] as $script) {
+            $script = str($script)->whenStartsWith('@', function (Stringable $s) {
+                return $s->replaceFirst('@', 'devpro run ');
+            })->prepend(base_path())->toString();
+
             $this->executeScript($script);
         }
     }
