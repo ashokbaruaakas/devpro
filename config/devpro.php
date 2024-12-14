@@ -6,11 +6,11 @@ return [
     'stubs_path' => base_path('stubs'),
 
     'scripts' => [
-        'dev' => 'npx concurrently -c "#c4b5fd,#fb7185,#fdba74" "php artisan queue:listen --tries=1" "php artisan pail --timeout=0" "npm run dev" --names=QUEUE,LOGS,VITE',
+        'dev' => 'npx concurrently -c "#c4b5fd,#fb7185,#fdba74" "php artisan queue:listen --tries=1 --timeout=0" "php artisan pail --timeout=0" "npm run dev" --names=QUEUE,LOGS,VITE',
         'build' => 'npm run build',
         'test' => 'php artisan test',
-        'format' => './vendor/bin/pint',
-        'analyse' => './vendor/bin/phpstan analyse',
+        'format' => ['./vendor/bin/pint', 'npx prettier . --write', 'npm run lint'],
+        'analyse' => './vendor/bin/phpstan analyse --memory-limit=2G',
         'log-clean' => 'find storage/logs -type f ! -name ".gitignore" -delete',
     ],
 ];

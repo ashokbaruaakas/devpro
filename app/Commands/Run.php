@@ -35,7 +35,7 @@ final class Run extends Command
      */
     public function handle(): void
     {
-        /** @var array<string, string> $scripts */
+        /** @var array<string, string|string[]> $scripts */
         $scripts = config('devpro.scripts');
 
         $scriptName = $this->getScriptName($scripts);
@@ -46,7 +46,9 @@ final class Run extends Command
             return;
         }
 
-        $this->executeScript($scripts[$scriptName]);
+        foreach ((array) $scripts[$scriptName] as $script) {
+            $this->executeScript($script);
+        }
     }
 
     /**
@@ -142,7 +144,7 @@ final class Run extends Command
     }
 
     /**
-     * @param  array<string, string>  $scripts
+     * @param  array<string, string|string[]>  $scripts
      */
     private function getScriptName(array $scripts): string
     {
@@ -156,7 +158,7 @@ final class Run extends Command
     }
 
     /**
-     * @param  array<string, string>  $scripts
+     * @param  array<string, string|string[]>  $scripts
      */
     private function searchScript(array $scripts): string
     {
