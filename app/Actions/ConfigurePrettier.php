@@ -18,7 +18,7 @@ final class ConfigurePrettier implements Invokable
 
         if (! File::exists("{$cwd}/node_modules/prettier")) {
             info('prettier not installed, installing it via npm...');
-            exec('npm install --save-dev prettier');
+            exec('npm install --save-dev --save-exact prettier');
         }
 
         if (! File::exists("{$cwd}/node_modules/prettier-plugin-organize-imports")) {
