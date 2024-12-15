@@ -48,6 +48,8 @@ final class Run extends Command
         }
 
         foreach ((array) $scripts[$scriptName] as $script) {
+            when(! str($script)->startsWith('@'), fn () => info("Running script: {$script}"));
+
             $script = str($script)
                 ->whenStartsWith('@', fn (Stringable $s) => $s->replaceFirst('@', base_path('devpro run ')))
                 ->toString();
