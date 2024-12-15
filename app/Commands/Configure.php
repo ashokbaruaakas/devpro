@@ -6,6 +6,7 @@ namespace App\Commands;
 
 use App\Actions\ConfigureLarastan;
 use App\Actions\ConfigurePail;
+use App\Actions\ConfigurePest;
 use App\Actions\ConfigurePint;
 use App\Actions\ConfigurePrettier;
 use App\Contracts\Invokable;
@@ -63,6 +64,7 @@ final class Configure extends Command
     {
         /** @var array<string, class-string<Invokable>> */
         $supportedTools = [
+            'PEST' => ConfigurePest::class,
             'PINT' => ConfigurePint::class,
             'LARASTAN' => ConfigureLarastan::class,
             'PAIL' => ConfigurePail::class,
