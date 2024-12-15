@@ -16,9 +16,9 @@ final class ConfigureLarastan implements Invokable
     {
         $cwd = getcwd() ?: '.';
 
-        if (! File::exists("{$cwd}/vendor/bin/phpstan")) {
+        if (! File::exists("{$cwd}/vendor/larastan/larastan")) {
             info('Larastan not installed, installing it via composer...');
-            exec('composer require --dev "larastan/larastan:^3.0"');
+            exec('composer require --dev "larastan/larastan:^2.0"');
         }
 
         $targetPath = "{$cwd}/phpstan.neon";
