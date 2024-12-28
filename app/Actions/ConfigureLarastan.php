@@ -23,8 +23,13 @@ final class ConfigureLarastan implements Invokable
 
         $targetPath = "{$cwd}/phpstan.neon";
 
-        if (File::exists($targetPath) &&
-            ! confirm('Do you want to overwrite the existing larastan configuration file?', default: false)) {
+        if (
+            File::exists($targetPath) &&
+            ! confirm(
+                'Do you want to overwrite the existing larastan configuration file?',
+                default: false
+            )
+        ) {
             info('Larastan configuration skipped.');
 
             return;
