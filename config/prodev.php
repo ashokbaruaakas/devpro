@@ -11,8 +11,10 @@ return [
         'build' => 'npm run build',
         'dev' => 'npx concurrently -c "#c4b5fd,#fb7185,#fdba74" "php artisan queue:listen --tries=1 --timeout=0" "php artisan pail --timeout=0" "npm run dev" --names=QUEUE,LOGS,VITE',
 
+        'pint' => './vendor/bin/pint',
+
         'lint' => [
-            './vendor/bin/pint',
+            '@pint',
             'npm run lint',
         ],
         'test:lint' => [
@@ -20,7 +22,7 @@ return [
         ],
         'test:types' => [
             './vendor/bin/phpstan analyse --memory-limit=1G',
-            'npm run test:types',
+            // 'npm run test:types',
         ],
         'test:type-coverage' => './vendor/bin/pest --type-coverage --min=100 --memory-limit=1G',
         'test:unit' => './vendor/bin/pest --parallel --ci --coverage --min=100.0',

@@ -16,12 +16,12 @@ final class ConfigurePint implements Invokable
     {
         $cwd = getcwd() ?: '.';
 
-        if (! File::exists("{$cwd}/vendor/bin/pint")) {
+        if (! File::exists("$cwd/vendor/bin/pint")) {
             info('Pint not installed, installing it via composer...');
             exec('composer require laravel/pint --dev');
         }
 
-        $targetPath = "{$cwd}/pint.json";
+        $targetPath = "$cwd/pint.json";
 
         if (File::exists($targetPath) &&
             ! confirm('Do you want to overwrite the existing pint configuration file?', false)) {
@@ -36,7 +36,7 @@ final class ConfigurePint implements Invokable
     private function pintStubPath(): string
     {
         return implode(DIRECTORY_SEPARATOR, [
-            config('devpro.stubs_path'),
+            config('prodev.stubs_path'),
             'pint-json.stub',
         ]);
     }

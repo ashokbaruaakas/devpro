@@ -25,11 +25,13 @@
         "php": "^8.2.0"
     },
     "require-dev": {
-        "laravel-zero/framework": "^11.0.2",
         "larastan/larastan": "^3.0",
+        "laravel-zero/framework": "^11.0.2",
+        "laravel/pail": "^1.2",
         "laravel/pint": "^1.18",
         "mockery/mockery": "^1.6.12",
-        "pestphp/pest": "^3.5.1"
+        "pestphp/pest": "^3.5.1",
+        "pestphp/pest-plugin-type-coverage": "^3.2"
     },
     "autoload": {
         "files": [
@@ -57,6 +59,6 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "bin": [
-        "builds/devpro"
+        "builds/prodev"
     ]
 }

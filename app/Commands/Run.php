@@ -37,7 +37,7 @@ final class Run extends Command
     public function handle(): void
     {
         /** @var array<string, string|string[]> $scripts */
-        $scripts = config('devpro.scripts');
+        $scripts = config('prodev.scripts');
 
         $scriptName = $this->getScriptName($scripts);
 
@@ -51,7 +51,7 @@ final class Run extends Command
             when(! str($script)->startsWith('@'), fn () => info("Running script: {$script}"));
 
             $script = str($script)
-                ->whenStartsWith('@', fn (Stringable $s) => $s->replaceFirst('@', base_path('devpro run ')))
+                ->whenStartsWith('@', fn (Stringable $s) => $s->replaceFirst('@', base_path('prodev run ')))
                 ->toString();
 
             $this->executeScript($script);

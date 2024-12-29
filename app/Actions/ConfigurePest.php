@@ -16,15 +16,15 @@ final class ConfigurePest implements Invokable
     {
         $cwd = getcwd() ?: '.';
 
-        if (! File::exists("{$cwd}/vendor/bin/pest")) {
+        if (! File::exists("$cwd/vendor/bin/pest")) {
             info('pest not installed, installing it via composer...');
             exec('composer remove phpunit/phpunit');
             exec('composer require pestphp/pest --dev --with-all-dependencies');
         }
 
         if (
-            ! File::exists("{$cwd}/vendor/pestphp/pest-plugin-type-coverage") &&
-            confirm('Do you want to install the Pest type coverage plugin?', true)
+            ! File::exists("$cwd/vendor/pestphp/pest-plugin-type-coverage") &&
+            confirm('Do you want to install the Pest type coverage plugin?')
         ) {
             exec('composer require pestphp/pest-plugin-type-coverage --dev');
         }

@@ -16,12 +16,12 @@ final class ConfigureLarastan implements Invokable
     {
         $cwd = getcwd() ?: '.';
 
-        if (! File::exists("{$cwd}/vendor/larastan/larastan")) {
+        if (! File::exists("$cwd/vendor/larastan/larastan")) {
             info('Larastan not installed, installing it via composer...');
             exec('composer require --dev "larastan/larastan:^2.0"');
         }
 
-        $targetPath = "{$cwd}/phpstan.neon";
+        $targetPath = "$cwd/phpstan.neon";
 
         if (
             File::exists($targetPath) &&
@@ -41,7 +41,7 @@ final class ConfigureLarastan implements Invokable
     private function larastanStubPath(): string
     {
         return implode(DIRECTORY_SEPARATOR, [
-            config('devpro.stubs_path'),
+            config('prodev.stubs_path'),
             'larastan-neon.stub',
         ]);
     }

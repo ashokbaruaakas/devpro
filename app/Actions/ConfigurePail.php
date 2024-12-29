@@ -15,7 +15,7 @@ final class ConfigurePail implements Invokable
     {
         $cwd = getcwd() ?: '.';
 
-        if (! File::exists("{$cwd}/vendor/laravel/pail")) {
+        if (! File::exists("$cwd/vendor/laravel/pail")) {
             info('Pail not installed, installing it via composer...');
             exec('composer require --dev laravel/pail');
         }
