@@ -27,7 +27,6 @@
     "require-dev": {
         "larastan/larastan": "^3.0",
         "laravel-zero/framework": "^11.0.2",
-        "laravel/pail": "^1.2",
         "laravel/pint": "^1.18",
         "mockery/mockery": "^1.6.12",
         "pestphp/pest": "^3.5.1",
