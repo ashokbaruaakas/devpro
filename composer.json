@@ -30,7 +30,8 @@
         "laravel/pint": "^1.18",
         "mockery/mockery": "^1.6.12",
         "pestphp/pest": "^3.5.1",
-        "pestphp/pest-plugin-type-coverage": "^3.2"
+        "pestphp/pest-plugin-type-coverage": "^3.2",
+        "rector/rector": "^2.0"
     },
     "autoload": {
         "files": [
