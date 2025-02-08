@@ -22,16 +22,21 @@
         }
     ],
     "require": {
-        "php": "^8.2.0",
-        "laravel-zero/framework": "^11.0.2"
+        "php": "^8.2.0"
     },
     "require-dev": {
         "larastan/larastan": "^3.0",
+        "laravel-zero/framework": "^11.0.2",
         "laravel/pint": "^1.18",
         "mockery/mockery": "^1.6.12",
-        "pestphp/pest": "^3.5.1"
+        "pestphp/pest": "^3.5.1",
+        "pestphp/pest-plugin-type-coverage": "^3.2",
+        "rector/rector": "^2.0"
     },
     "autoload": {
+        "files": [
+            "bootstrap/helpers.php"
+        ],
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
@@ -54,6 +59,6 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "bin": [
-        "devpro"
+        "builds/devpulse"
     ]
 }
