@@ -16,13 +16,13 @@ use function Laravel\Prompts\info;
  * @phpstan-type ScriptShape array{name: string, command: string}
  * @phpstan-type ConfigurationShape array{scripts: ScriptShape[]}
  */
-final class Configuration
+final readonly class Configuration
 {
     private const JSON_CONFIGURATION_NAME = 'devpulse.json';
 
     public function __construct(
         /** @var ScriptShape[] */
-        private readonly array $scripts = LiteralValue::EMPTY_ARRAY
+        private array $scripts = LiteralValue::EMPTY_ARRAY
     ) {
         // ...
     }
@@ -67,7 +67,7 @@ final class Configuration
         }
 
         /** @var ScriptShape[] $scripts */
-        $scripts = Arr::where($this->scripts, fn (array $script) => in_array($script['name'], $keys));
+        $scripts = Arr::where($this->scripts, fn (array $script): bool => in_array($script['name'], $keys));
 
         return $scripts;
     }

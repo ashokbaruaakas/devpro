@@ -17,27 +17,20 @@ final class RunScript
     /**
      * @param  ScriptShape  $script
      */
-    public function handle(array $script): bool
+    public function handle(array $script): void
     {
-        return rescue(
-            function () use ($script) {
-                $command = $this->toCommandArray($script['command']);
-                $path = absolute_path();
+        $command = $this->toCommandArray($script['command']);
+        $path = absolute_path();
 
-                $process = new Process($command, $path);
-                $process->setTimeout(0); // Disable timeout for long-running commands TODO:: Make Me Configurable
-                $process->setTty(Process::isTtySupported()); // Enable TTY if supported TODO:: Make Me Configurable
+        $process = new Process($command, $path);
+        $process->setTimeout(0); // Disable timeout for long-running commands TODO:: Make Me Configurable
+        $process->setTty(Process::isTtySupported()); // Enable TTY if supported TODO:: Make Me Configurable
 
-                $process->start();
+        $process->start();
 
-                while ($process->isRunning()) {
-                    $this->displayProcessOutput($process);
-                }
-
-                return true;
-            },
-            false
-        );
+        while ($process->isRunning()) {
+            $this->displayProcessOutput($process);
+        }
     }
 
     /**

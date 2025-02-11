@@ -14,7 +14,7 @@ final class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        app()->singleton(Configuration::class, fn () => Configuration::make());
+        app()->singleton(Configuration::class, fn (): Configuration => Configuration::make());
     }
 
     /**
