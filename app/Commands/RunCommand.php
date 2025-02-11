@@ -41,6 +41,17 @@ final class RunCommand extends Command
 
         $scripts = $configuration->scripts(...$names);
 
+        $missingScripts = array_diff($names, array_column($scripts, 'name'));
+
+        if (filled($missingScripts)) {
+            $this->error(sprintf(
+                ' Script `%s` does not exist! ',
+                implode(', ', $missingScripts)
+            ));
+
+            return;
+        }
+
         foreach ($scripts as $script) {
             $this->scriptHeading($script, $terminal->getWidth());
             $runScript->handle($script);
