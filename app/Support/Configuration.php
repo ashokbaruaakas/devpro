@@ -22,7 +22,7 @@ final class Configuration
 
     public function __construct(
         /** @var ScriptShape[] */
-        private array $scripts = LiteralValue::EMPTY_ARRAY
+        private readonly array $scripts = LiteralValue::EMPTY_ARRAY
     ) {
         // ...
     }
@@ -51,17 +51,24 @@ final class Configuration
         }
 
         $jsonContents = File::get(self::filePath());
+        /** @var ConfigurationShape $jsonContentsAsArray */
         $jsonContentsAsArray = json_decode($jsonContents, true);
 
         return new self($jsonContentsAsArray['scripts']);
     }
 
+    /**
+     * @return ScriptShape[]
+     */
     public function scripts(string ...$keys): array
     {
         if (blank($keys)) {
             return $this->scripts;
         }
 
-        return Arr::where($this->scripts, fn ($script) => in_array($script['name'], $keys));
+        /** @var ScriptShape[] $scripts */
+        $scripts = Arr::where($this->scripts, fn (array $script) => in_array($script['name'], $keys));
+
+        return $scripts;
     }
 }

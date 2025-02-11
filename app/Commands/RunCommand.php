@@ -36,6 +36,7 @@ final class RunCommand extends Command
      */
     public function handle(Terminal $terminal, Configuration $configuration, RunScript $runScript): void
     {
+        /** @var string[] $names */
         $names = str($this->argument('names'))->explode(',')->toArray();
 
         $scripts = $configuration->scripts(...$names);
