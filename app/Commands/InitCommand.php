@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Commands;
 
+use App\Actions\WriteConfiguration;
+use App\Support\Configuration;
 use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Support\Facades\File;
 use LaravelZero\Framework\Commands\Command;
 
 use function Laravel\Prompts\confirm;
@@ -30,26 +31,19 @@ final class InitCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): void
+    public function handle(WriteConfiguration $writeConfiguration): void
     {
-        $configName = config('devpulse.json_configuration_name');
-        $configPath = absolute_path($configName);
+        if (Configuration::exists()) {
+            if (! confirm('Look like `devpulse` is already configured! Want to reconfigure it?')) {
+                info('Configuration skipped!');
 
-        if (file_exists($configPath)) {
-            if (! confirm('Look like devpulse is already configured! Want to reconfigure it?')) {
                 return;
             }
 
-            unlink($configPath);
+            Configuration::delete();
         }
 
-        $configContent = collect([
-            'scripts' => [
-                // TODO:: Add Some Default Scripts
-            ],
-        ]);
-
-        File::put($configPath, $configContent->toJson(JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        $writeConfiguration->handle();
 
         info('Configuration successfully finished!');
     }
