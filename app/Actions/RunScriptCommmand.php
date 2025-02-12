@@ -4,28 +4,21 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\Support\Configuration;
 use Symfony\Component\Process\Process;
 
 use function Laravel\Prompts\note;
 
-/**
- * @phpstan-import-type ScriptShape from Configuration
- */
-final class RunScript
+final class RunScriptCommmand
 {
-    /**
-     * @param  ScriptShape  $script
-     */
-    public function handle(array $script): void
+    public function handle(string $command, int $timeout = 0): void
     {
-        $command = $this->toCommandArray($script['command']);
-        $path = absolute_path();
+        $process = new Process(
+            $this->toCommandArray($command),
+            absolute_path()
+        );
 
-        $process = new Process($command, $path);
-        $process->setTimeout(0); // Disable timeout for long-running commands TODO:: Make Me Configurable
-        $process->setTty(Process::isTtySupported()); // Enable TTY if supported TODO:: Make Me Configurable
-
+        $process->setTimeout($timeout);
+        $process->setTty(Process::isTtySupported());
         $process->start();
 
         while ($process->isRunning()) {
