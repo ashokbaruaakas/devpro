@@ -7,6 +7,7 @@ namespace App\Commands;
 use App\Actions\RunScriptCommmand;
 use App\Support\Configuration;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Stringable;
 use LaravelZero\Framework\Commands\Command;
 use Symfony\Component\Console\Terminal;
 
@@ -52,7 +53,7 @@ final class RunCommand extends Command
         }
 
         if ($concurrently) {
-            $commands = array_map(fn (array $script): string => '"'.$script['command'].'"', $scripts);
+            $commands = array_map(fn (array $script): string => $this->scriptCommand($script, $concurrently), $scripts);
             $colors = array_map(fn (array $script): string => $script['color'] ?? $this->randomHexColor(), $scripts);
 
             $command = sprintf(
@@ -70,7 +71,7 @@ final class RunCommand extends Command
 
         foreach ($scripts as $script) {
             $this->scriptHeading($script, $terminal->getWidth());
-            $runCommandAction->handle($script['command']);
+            $runCommandAction->handle($this->scriptCommand($script));
             $this->newLine();
         }
     }
@@ -120,5 +121,21 @@ final class RunCommand extends Command
         }
 
         return $color;
+    }
+
+    /**
+     * @param  ScriptShape  $script
+     */
+    private function scriptCommand(array $script, bool $concurrently = false): string
+    {
+        $command = str($script['command']);
+
+        /** @var string $appName */
+        $appName = config('app.name');
+
+        return $command
+            ->when($command->startsWith($appName), fn (Stringable $s) => $s->replace($appName, base_path($appName)))
+            ->when($concurrently, fn (Stringable $s) => $s->wrap('"'))
+            ->toString();
     }
 }
