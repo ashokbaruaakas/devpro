@@ -6,14 +6,13 @@ namespace App\Support;
 
 use App\Actions\WriteConfiguration;
 use App\Constants\LiteralValue;
-use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 
 use function Laravel\Prompts\info;
 
 /**
- * @phpstan-type ScriptShape array{name: string, command: string}
+ * @phpstan-type ScriptShape array{name: string, command: string, color?: string}
  * @phpstan-type ConfigurationShape array{scripts: ScriptShape[]}
  */
 final readonly class Configuration

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Commands;
 
-use App\Actions\RunScript;
+use App\Actions\RunScriptCommmand;
 use App\Support\Configuration;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
@@ -22,7 +22,7 @@ final class RunCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'run {names}';
+    protected $signature = 'run {names} {--concurrently}';
 
     /**
      * The console command description.
@@ -34,16 +34,15 @@ final class RunCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(Terminal $terminal, Configuration $configuration, RunScript $runScript): void
+    public function handle(Terminal $terminal, Configuration $configuration, RunScriptCommmand $runCommandAction): void
     {
         /** @var string[] $names */
         $names = str($this->argument('names'))->explode(',')->toArray();
+        $concurrently = $this->option('concurrently');
 
         $scripts = $configuration->scripts(...$names);
 
-        $missingScripts = array_diff($names, array_column($scripts, 'name'));
-
-        if (filled($missingScripts)) {
+        if (filled($missingScripts = $this->missingScripts($names, $scripts))) {
             $this->error(sprintf(
                 ' Script `%s` does not exist! ',
                 implode(', ', $missingScripts)
@@ -52,9 +51,26 @@ final class RunCommand extends Command
             return;
         }
 
+        if ($concurrently) {
+            $commands = array_map(fn (array $script): string => '"'.$script['command'].'"', $scripts);
+            $colors = array_map(fn (array $script): string => $script['color'] ?? $this->randomHexColor(), $scripts);
+
+            $command = sprintf(
+                '%s -c "%s" --names=%s %s',
+                'npx concurrently',
+                implode(',', $colors),
+                implode(',', array_column($scripts, 'name')),
+                implode(' ', $commands)
+            );
+
+            $runCommandAction->handle($command);
+
+            return;
+        }
+
         foreach ($scripts as $script) {
             $this->scriptHeading($script, $terminal->getWidth());
-            $runScript->handle($script);
+            $runCommandAction->handle($script['command']);
             $this->newLine();
         }
     }
@@ -65,6 +81,16 @@ final class RunCommand extends Command
     public function schedule(Schedule $schedule): void
     {
         // $schedule->command(static::class)->everyMinute();
+    }
+
+    /**
+     * @param  array<string>  $names
+     * @param  array<ScriptShape>  $scripts
+     * @return array<string>
+     */
+    public function missingScripts(array $names, array $scripts): array
+    {
+        return array_diff($names, array_column($scripts, 'name'));
     }
 
     /**
@@ -83,5 +109,16 @@ final class RunCommand extends Command
                 <span class="text-gray-500">$dots</span>
             </div>
         HTML);
+    }
+
+    private function randomHexColor(): string
+    {
+        $chars = 'ABCDEF0123456789';
+        $color = '#';
+        for ($i = 0; $i < 6; $i++) {
+            $color .= $chars[random_int(0, mb_strlen($chars) - 1)];
+        }
+
+        return $color;
     }
 }
