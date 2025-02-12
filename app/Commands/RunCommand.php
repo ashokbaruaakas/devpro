@@ -7,6 +7,7 @@ namespace App\Commands;
 use App\Actions\RunScriptCommmand;
 use App\Support\Configuration;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Str;
 use Illuminate\Support\Stringable;
 use LaravelZero\Framework\Commands\Command;
 use Symfony\Component\Console\Terminal;
@@ -69,8 +70,14 @@ final class RunCommand extends Command
             return;
         }
 
+        /** @var string $appName */
+        $appName = config('app.name');
+
         foreach ($scripts as $script) {
-            $this->scriptHeading($script, $terminal->getWidth());
+            when(! Str::startsWith($script['command'], $appName),
+                fn () => $this->scriptHeading($script, $terminal->getWidth())
+            );
+
             $runCommandAction->handle($this->scriptCommand($script));
             $this->newLine();
         }
