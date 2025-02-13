@@ -70,11 +70,8 @@ final class RunCommand extends Command
             return;
         }
 
-        /** @var string $appName */
-        $appName = config('app.name');
-
         foreach ($scripts as $script) {
-            when(! Str::startsWith($script['command'], $appName),
+            when(! $this->isDevPulseCommand($script['command']),
                 fn () => $this->scriptHeading($script, $terminal->getWidth())
             );
 
@@ -144,5 +141,13 @@ final class RunCommand extends Command
             ->when($command->startsWith($appName), fn (Stringable $s) => $s->replace($appName, base_path($appName)))
             ->when($concurrently, fn (Stringable $s) => $s->wrap('"'))
             ->toString();
+    }
+
+    private function isDevPulseCommand(string $command): bool
+    {
+        /** @var string $appName */
+        $appName = config('app.name');
+
+        return Str::startsWith($command, $appName);
     }
 }
