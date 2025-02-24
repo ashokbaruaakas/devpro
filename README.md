@@ -1,34 +1,53 @@
 <p align="center">
-    <img title="Laravel Zero" height="100" src="https://raw.githubusercontent.com/laravel-zero/docs/master/images/logo/laravel-zero-readme.png" alt="Laravel Zero Logo" />
+    <img src="/arts/devpulse-cli-logo.svg" alt="Overview DevPulse PHP" style="width:250px;">
 </p>
 
-<p align="center">
-  <a href="https://github.com/laravel-zero/framework/actions"><img src="https://github.com/laravel-zero/laravel-zero/actions/workflows/tests.yml/badge.svg" alt="Build Status" /></a>
-  <a href="https://packagist.org/packages/laravel-zero/framework"><img src="https://img.shields.io/packagist/dt/laravel-zero/framework.svg" alt="Total Downloads" /></a>
-  <a href="https://packagist.org/packages/laravel-zero/framework"><img src="https://img.shields.io/packagist/v/laravel-zero/framework.svg?label=stable" alt="Latest Stable Version" /></a>
-  <a href="https://packagist.org/packages/laravel-zero/framework"><img src="https://img.shields.io/packagist/l/laravel-zero/framework.svg" alt="License" /></a>
-</p>
+---
 
-Laravel Zero was created by [Nuno Maduro](https://github.com/nunomaduro) and [Owen Voke](https://github.com/owenvoke), and is a micro-framework that provides an elegant starting point for your console application. It is an **unofficial** and customized version of Laravel optimized for building command-line applications.
+**DevPulse** is an open-source command-line tool that simplifies and unifies developer workflows. Install it globally, define project-specific or reusable scripts (e.g., builds, tests, deployments), and run them with `devpulse run <script>`. Designed for flexibility, **DevPulse** lets you replace scattered scripts and tools with a single interface, empowering teams to standardize workflows without locking into specific languages or ecosystems.
 
-- Built on top of the [Laravel](https://laravel.com) components.
-- Optional installation of Laravel [Eloquent](https://laravel-zero.com/docs/database/), Laravel [Logging](https://laravel-zero.com/docs/logging/) and many others.
-- Supports interactive [menus](https://laravel-zero.com/docs/build-interactive-menus/) and [desktop notifications](https://laravel-zero.com/docs/send-desktop-notifications/) on Linux, Windows & MacOS.
-- Ships with a [Scheduler](https://laravel-zero.com/docs/task-scheduling/) and  a [Standalone Compiler](https://laravel-zero.com/docs/build-a-standalone-application/).
-- Integration with [Collision](https://github.com/nunomaduro/collision) - Beautiful error reporting
+> Note: DevPulse is still under active development and is not yet ready for production use.
 
-------
+## Installation
 
-## Documentation
+Coming Soon...
 
-For full documentation, visit [laravel-zero.com](https://laravel-zero.com/).
+## Usage
 
-## Support the development
-**Do you like this project? Support it by donating**
+Coming Soon...
 
-- PayPal: [Donate](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=66BYDWAT92N6L)
-- Patreon: [Donate](https://www.patreon.com/nunomaduro)
+## Configuration
 
-## License
+DevPulse can be configured using a `devpulse.json` file in the root of your project.
 
-Laravel Zero is an open-source software licensed under the MIT license.
+You can scaffold the `devpulse.json` file with:
+
+```bash
+devpulse init
+```
+
+Here's an example configuration:
+
+```json
+{
+    "scripts": [
+        {
+            "name": "php",
+            "description": "Print current PHP version.",
+            "command": "php --version"
+        }
+    ]
+}
+```
+
+### Presets
+
+Coming Soon...
+
+## Command Options
+
+Coming Soon...
+
+---
+
+DevPulse is an open-sourced software licensed under the **[MIT license](https://opensource.org/licenses/MIT)**.
