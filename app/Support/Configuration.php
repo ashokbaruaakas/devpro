@@ -75,6 +75,11 @@ final readonly class Configuration
         return new self($jsonContentsAsArray['scripts']);
     }
 
+    public static function instance(): self
+    {
+        return resolve(self::class);
+    }
+
     /**
      * @return ScriptShape[]
      */
