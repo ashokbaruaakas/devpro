@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Support;
 
-use App\Actions\WriteConfiguration;
 use App\Constants\LiteralValue;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 
 use function Laravel\Prompts\info;
@@ -26,9 +26,14 @@ final readonly class Configuration
         // ...
     }
 
+    public static function fileName(): string
+    {
+        return self::JSON_CONFIGURATION_NAME;
+    }
+
     public static function filePath(): string
     {
-        return absolute_path(self::JSON_CONFIGURATION_NAME);
+        return absolute_path(self::fileName());
     }
 
     public static function exists(): bool
@@ -41,12 +46,31 @@ final readonly class Configuration
         return File::delete(self::filePath());
     }
 
+    /**
+     * @param  Collection<key-of<ConfigurationShape>, value-of<ConfigurationShape>>|LiteralValue::NULL  $configurationContent
+     */
+    public static function write(?Collection $configurationContent = LiteralValue::NULL): void
+    {
+        if (blank($configurationContent)) {
+            $configurationContent = collect([
+                'scripts' => [
+                    // TODO:: Add Some Default Scripts
+                ],
+            ]);
+        }
+
+        File::put(
+            self::filePath(),
+            $configurationContent->toJson(JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+        );
+    }
+
     public static function make(): self
     {
         if (! self::exists()) {
             info('Look like devpulse is not configured yet. Configuring now...');
 
-            resolve(WriteConfiguration::class)->handle();
+            self::write();
         }
 
         $jsonContents = File::get(self::filePath());
@@ -54,6 +78,11 @@ final readonly class Configuration
         $jsonContentsAsArray = json_decode($jsonContents, true);
 
         return new self($jsonContentsAsArray['scripts']);
+    }
+
+    public static function instance(): self
+    {
+        return resolve(self::class);
     }
 
     /**

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Commands;
 
-use App\Actions\WriteConfiguration;
 use App\Support\Configuration;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
@@ -31,7 +30,7 @@ final class InitCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(WriteConfiguration $writeConfiguration): void
+    public function handle(): void
     {
         if (Configuration::exists()) {
             if (! confirm('Look like `devpulse` is already configured! Want to reconfigure it?')) {
@@ -43,7 +42,7 @@ final class InitCommand extends Command
             Configuration::delete();
         }
 
-        $writeConfiguration->handle();
+        Configuration::write();
 
         info('Configuration successfully finished!');
     }
