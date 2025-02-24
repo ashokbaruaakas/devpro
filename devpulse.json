@@ -1,39 +1,39 @@
 {
     "scripts": [
         {
-            "name": "test",
+            "name": "pest",
             "description": "Test code with Pest",
-            "command": "./vendor/bin/pest --coverage --compact"
+            "command": "./vendor/bin/pest --parallel --coverage --compact"
         },
         {
-            "name": "format",
+            "name": "pint",
             "description": "Format PHP code with Pint",
             "command": "./vendor/bin/pint"
         },
         {
-            "name": "format:check",
+            "name": "pint:check",
             "description": "Check format of PHP code with Pint",
             "command": "./vendor/bin/pint --test"
         },
         {
-            "name": "refacto",
+            "name": "rector",
             "description": "Refactor code with Rector",
             "command": "./vendor/bin/rector"
         },
         {
-            "name": "refacto:check",
+            "name": "rector:check",
             "description": "Check refactoring with Rector",
             "command": "./vendor/bin/rector --dry-run"
         },
         {
-            "name": "analyze",
+            "name": "phpstan",
             "description": "Analyze code with PHPStan",
             "command": "./vendor/bin/phpstan analyze --memory-limit=1G"
         },
         {
             "name": "check",
             "description": "Check everything possible with Pint, Pest, Rector and PHPStan",
-            "command": "devpulse run format:check,test,refacto:check,analyze"
+            "command": "devpulse run pint:check,pest,rector:check,phpstan"
         }
     ]
 }
