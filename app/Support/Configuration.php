@@ -26,9 +26,14 @@ final readonly class Configuration
         // ...
     }
 
+    public static function fileName(): string
+    {
+        return self::JSON_CONFIGURATION_NAME;
+    }
+
     public static function filePath(): string
     {
-        return absolute_path(self::JSON_CONFIGURATION_NAME);
+        return absolute_path(self::fileName());
     }
 
     public static function exists(): bool
