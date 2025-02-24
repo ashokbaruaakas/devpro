@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="/arts/devpulse-cli-logo.svg" alt="Overview DevPulse PHP" style="width:250px;">
+    <img src="/arts/devpulse-cli-logo.svg" alt="Overview DevPulse PHP" style="width:200px">
 </p>
 
 ---
